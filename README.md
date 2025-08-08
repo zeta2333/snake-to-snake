@@ -25,6 +25,12 @@ A modern, feature-rich Snake game built with Vue 3, TypeScript, and Vite. This g
 ### ✨ Visual Effects
 - **Particle system** with food consumption effects
 - **Level-up celebrations** with particle bursts
+- **Snake head evolution system**: 🆕
+  - 🤍 Basic Head (0-2 foods eaten)
+  - 🟢 Green Head (3-5 foods eaten)
+  - 🔵 Blue Head (6-8 foods eaten)
+  - 🟣 Purple Head (9-11 foods eaten)
+  - 🟡 Golden Head (12+ foods eaten) with special animations
 - **Smooth animations** and transitions
 - **Responsive design** for all screen sizes
 - **Modern gradient backgrounds** and glassmorphism effects

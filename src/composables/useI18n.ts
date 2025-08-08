@@ -61,7 +61,14 @@ const translations: Translations = {
     'final.perfectGame': '🏆 完美游戏！🏆',
     
     // 语言切换
-    'language.switch': '🌐 中/EN'
+    'language.switch': '🌐 中/EN',
+
+    // 蛇头等级
+    'snake.level.0': '初级蛇头',
+    'snake.level.1': '绿色蛇头',
+    'snake.level.2': '蓝色蛇头',
+    'snake.level.3': '紫色蛇头',
+    'snake.level.4': '黄金蛇头'
   },
   en: {
     // 游戏标题和基本信息
@@ -116,7 +123,14 @@ const translations: Translations = {
     'final.perfectGame': '🏆 PERFECT GAME! 🏆',
     
     // 语言切换
-    'language.switch': '🌐 EN/中'
+    'language.switch': '🌐 EN/中',
+
+    // 蛇头等级
+    'snake.level.0': 'Basic Head',
+    'snake.level.1': 'Green Head',
+    'snake.level.2': 'Blue Head',
+    'snake.level.3': 'Purple Head',
+    'snake.level.4': 'Golden Head'
   }
 }
 

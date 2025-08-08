@@ -25,6 +25,10 @@
           <span class="stat-label">{{ t('stats.time') }}:</span>
           <span class="stat-value">{{ formatTime(gameStats.gameTime) }}</span>
         </div>
+        <div class="stat snake-level-indicator" v-if="gameState !== GameState.MENU">
+          <span class="stat-label">{{ t('snake.level.' + snakeHeadLevel) }}:</span>
+          <span class="stat-value snake-head-preview" :class="'snake-head-level-' + snakeHeadLevel">🐍</span>
+        </div>
         <div class="stat sound-control" @click="toggleSound">
           <span class="stat-label">{{ t('stats.sound') }}:</span>
           <span class="stat-value">{{ soundEnabled ? '🔊' : '🔇' }}</span>
@@ -85,6 +89,11 @@
             class="grid-cell"
             :class="{
               'snake-head': isSnakeHead(cell),
+              'snake-head-level-0': isSnakeHead(cell) && snakeHeadLevel === 0,
+              'snake-head-level-1': isSnakeHead(cell) && snakeHeadLevel === 1,
+              'snake-head-level-2': isSnakeHead(cell) && snakeHeadLevel === 2,
+              'snake-head-level-3': isSnakeHead(cell) && snakeHeadLevel === 3,
+              'snake-head-level-4': isSnakeHead(cell) && snakeHeadLevel === 4,
               'snake-body': isSnakeBody(cell),
               'food-normal': isFoodAt(cell) && food.type === FoodType.NORMAL,
               'food-bonus': isFoodAt(cell) && food.type === FoodType.BONUS,
@@ -209,6 +218,7 @@ const {
   gridCells,
   soundEnabled,
   isGameRunning,
+  snakeHeadLevel,
   startGame,
   pauseGame,
   resumeGame,
@@ -245,6 +255,16 @@ watch(() => gameStats.level, (newLevel, oldLevel) => {
   if (newLevel > oldLevel && particleSystemRef.value) {
     // Level up effect
     const centerX = 250 // Center of game board
+    const centerY = 250
+    particleSystemRef.value.createLevelUpEffect(centerX, centerY)
+  }
+})
+
+// Watch for snake head level changes
+watch(() => snakeHeadLevel.value, (newLevel, oldLevel) => {
+  if (newLevel > oldLevel && particleSystemRef.value) {
+    // Snake head upgrade effect
+    const centerX = 250
     const centerY = 250
     particleSystemRef.value.createLevelUpEffect(centerX, centerY)
   }
@@ -344,6 +364,22 @@ function formatTime(seconds: number): string {
   padding: 10px 15px;
   border-radius: 10px;
   backdrop-filter: blur(10px);
+}
+
+.snake-level-indicator {
+  position: relative;
+}
+
+.snake-head-preview {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  margin-left: 5px;
+  transition: all 0.3s ease;
 }
 
 .stat-label {
@@ -489,8 +525,66 @@ function formatTime(seconds: number): string {
 }
 
 .snake-head {
-  background: #4CAF50;
-  box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 蛇头等级颜色 */
+.snake-head-level-0 {
+  background: linear-gradient(45deg, #ffffff, #f0f0f0);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(200, 200, 200, 0.3);
+}
+
+.snake-head-level-1 {
+  background: linear-gradient(45deg, #4CAF50, #66BB6A);
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.6);
+  border: 2px solid rgba(76, 175, 80, 0.4);
+}
+
+.snake-head-level-2 {
+  background: linear-gradient(45deg, #2196F3, #42A5F5);
+  box-shadow: 0 0 15px rgba(33, 150, 243, 0.6);
+  border: 2px solid rgba(33, 150, 243, 0.4);
+}
+
+.snake-head-level-3 {
+  background: linear-gradient(45deg, #9C27B0, #BA68C8);
+  box-shadow: 0 0 15px rgba(156, 39, 176, 0.6);
+  border: 2px solid rgba(156, 39, 176, 0.4);
+}
+
+.snake-head-level-4 {
+  background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  border: 2px solid rgba(255, 215, 0, 0.6);
+  animation: golden-glow 2s ease-in-out infinite alternate;
+  background-size: 200% 200%;
+  animation: golden-glow 2s ease-in-out infinite alternate, golden-gradient 3s ease-in-out infinite;
+}
+
+@keyframes golden-glow {
+  0% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    transform: scale(1);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(255, 215, 0, 1);
+    transform: scale(1.05);
+  }
+}
+
+@keyframes golden-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .snake-body {

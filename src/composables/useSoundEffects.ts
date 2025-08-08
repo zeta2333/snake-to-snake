@@ -72,7 +72,15 @@ export function useSoundEffects() {
   function playResumeSound() {
     playTone(660, 0.1, 'triangle')
   }
-  
+
+  function playSnakeUpgradeSound() {
+    // Play a special upgrade sound sequence
+    const notes = [440, 554, 659, 880] // A, C#, E, A (higher octave)
+    notes.forEach((note, index) => {
+      setTimeout(() => playTone(note, 0.15, 'sine'), index * 80)
+    })
+  }
+
   function toggleSound() {
     soundEnabled.value = !soundEnabled.value
   }
@@ -86,6 +94,7 @@ export function useSoundEffects() {
     playLevelUpSound,
     playPauseSound,
     playResumeSound,
+    playSnakeUpgradeSound,
     toggleSound
   }
 }

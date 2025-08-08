@@ -1,4 +1,4 @@
-import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, computed, watch, onMounted, onUnmounted } from 'vue'
 import type {
   Position,
   Snake,
@@ -25,6 +25,7 @@ export function useSnakeGame() {
     playLevelUpSound,
     playPauseSound,
     playResumeSound,
+    playSnakeUpgradeSound,
     toggleSound
   } = useSoundEffects()
 
@@ -75,6 +76,25 @@ export function useSnakeGame() {
   })
 
   const isGameRunning = computed(() => gameState.value === GameState.PLAYING)
+
+  // Snake head color level based on food eaten
+  const snakeHeadLevel = computed(() => {
+    const foodCount = gameStats.foodEaten
+    if (foodCount < 3) return 0      // 白色 (初始)
+    if (foodCount < 6) return 1      // 绿色 (3-5个食物)
+    if (foodCount < 9) return 2      // 蓝色 (6-8个食物)
+    if (foodCount < 12) return 3     // 紫色 (9-11个食物)
+    return 4                         // 金色 (12+个食物)
+  })
+
+  // Watch for snake head level changes and play upgrade sound
+  let previousSnakeLevel = 0
+  watch(snakeHeadLevel, (newLevel) => {
+    if (newLevel > previousSnakeLevel && previousSnakeLevel >= 0) {
+      playSnakeUpgradeSound()
+    }
+    previousSnakeLevel = newLevel
+  })
 
   // Game logic functions
   function initializeGame() {
@@ -423,6 +443,7 @@ export function useSnakeGame() {
     // Computed
     gridCells,
     isGameRunning,
+    snakeHeadLevel,
 
     // Methods
     startGame,
